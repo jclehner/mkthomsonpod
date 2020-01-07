@@ -91,7 +91,7 @@ char* generate_thomson_pod(time_t timestamp, const char* salt)
 
 	char data2[20];
 	memset(data2, 0, 20);
-	sprintf(data2,"%s525",salt);
+	snprintf(data2, sizeof(data2), "%s525",salt);
 	uint32_t len2 = strlen(data2);
 
 	uint8_t md[16];
