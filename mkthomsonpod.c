@@ -97,14 +97,10 @@ char* generate_thomson_pod(time_t timestamp, const char* salt)
 	uint8_t md[16];
 	hash_thomson_pod(data1, len1, data2, len2 & 0xffff, md);
 
-	char mdstr[33];
-	sprintf(mdstr,"%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x",
-			md[0], md[1], md[2], md[3], md[4], md[5], md[6], md[7],
-			md[8], md[9], md[10], md[11], md[12], md[13], md[14], md[15]);
-
+	// we only want the first 15 bytes of the hash's string representation
 	static char pod[16];
-	memcpy(pod, mdstr, 15);
-	pod[15] = '\0';
+	sprintf(pod,"%02x%02x%02x%02x%02x%02x%02x%x", md[0], md[1],
+			md[2], md[3], md[4], md[5], md[6], md[7] >> 4);
 	return pod;
 }
 
