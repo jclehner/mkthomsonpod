@@ -1,4 +1,4 @@
-mkthomsonpod - PoD generator for Thomson/Technicolor CMs
+mkthomsonpod
 ========================================================
 
 This is a PoD (password of the day) generator for Thomson
