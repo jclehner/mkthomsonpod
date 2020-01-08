@@ -111,7 +111,7 @@ int main(int argc, char** argv)
 		char* endptr;
 		time = strtol(argv[1], &endptr, 10);
 		if (*endptr) {
-			fprintf(stderr, "Error: bad number: %s\n", argv[1]);
+			fprintf(stderr, "Error: bad timestamp: %s\n", argv[1]);
 			return 1;
 		}
 	}
