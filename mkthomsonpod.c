@@ -40,29 +40,24 @@
  * cadff4300001088
  */
 
-// As usual, many a snakeoil lies ahead.
-
-void hash_thomson_pod(char* data1, uint32_t len1, char* data2, uint16_t len2, uint8_t* md)
+void hmac_md5(char* data, uint32_t dlen, char* key, uint16_t klen, uint8_t* md)
 {
 	char buf1[64];
-	char buf2[64];
+	char buf2[sizeof(buf1)];
 	char d2hash[16];
-	MD5_CTX ctx;
 
-	if (len2 > 64) {
-		MD5_Init(&ctx);
-		MD5_Update(&ctx, data2, len2);
-		MD5_Final((uint8_t*)d2hash, &ctx);
-		data2 = d2hash;
-		len2 = 16;
+	if (klen > 64) {
+		MD5((uint8_t*)key, klen, (uint8_t*)d2hash);
+		key = d2hash;
+		klen = 16;
 	}
 
 	memset(buf1, 0, sizeof(buf1));
 	memset(buf2, 0, sizeof(buf2));
 
-	if (len2) {
-		memcpy(buf1, data2, len2);
-		memcpy(buf2, data2, len2);
+	if (klen) {
+		memcpy(buf1, key, klen);
+		memcpy(buf2, key, klen);
 	}
 
 	for (int i = 0; i < sizeof(buf1); ++i) {
@@ -70,9 +65,10 @@ void hash_thomson_pod(char* data1, uint32_t len1, char* data2, uint16_t len2, ui
 		buf2[i] ^= 0x5c;
 	}
 
+	MD5_CTX ctx;
 	MD5_Init(&ctx);
 	MD5_Update(&ctx, buf1, sizeof(buf1));
-	MD5_Update(&ctx, data1, len1);
+	MD5_Update(&ctx, data, dlen);
 	MD5_Final(md, &ctx);
 
 	MD5_Init(&ctx);
@@ -85,17 +81,15 @@ char* generate_thomson_pod(time_t timestamp, const char* salt)
 {
 	struct tm* tm = localtime(&timestamp);
 
-	char data1[64];
-	sprintf(data1, "%d.%02d.%02d", tm->tm_year + 1900, tm->tm_mon + 1, tm->tm_mday);
-	uint32_t len1 = strlen(data1);
+	char data[64];
+	snprintf(data, sizeof(data), "%d.%02d.%02d", tm->tm_year + 1900, tm->tm_mon + 1, tm->tm_mday);
 
-	char data2[20];
-	memset(data2, 0, 20);
-	snprintf(data2, sizeof(data2), "%s525",salt);
-	uint32_t len2 = strlen(data2);
+	char key[20];
+	memset(key, 0, 20);
+	snprintf(key, sizeof(key), "%s525",salt);
 
 	uint8_t md[16];
-	hash_thomson_pod(data1, len1, data2, len2 & 0xffff, md);
+	hmac_md5(data, strlen(data), key, strlen(key), md);
 
 	// we only want the first 15 bytes of the hash's string representation
 	static char pod[16];
