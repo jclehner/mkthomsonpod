@@ -1,31 +1,33 @@
 mkthomsonpod
 ========================================================
 
-This is a PoD (password of the day) generator for Thomson
-and Technicolor cable modems. It has been verified to
-work on a Thomson TWG850, TWG870 and Technicolor TC7200.
+This is a PoD (password of the day) generator for Thomson and
+Technicolor cable modems. It has been verified to work on a
+Thomson TWG850, TWG870 and Technicolor TC7200.
 
-It takes one (or two) arguments, the first being a unix
-timestamp of the modem's current time (usually indicated
-somewhere in the web interface). The second argument
-is an optional salt, that defaults to `"thomson"` on the
-firmwares I've seen so far.
-
-Requires OpenSSL or compatible library.
-
-Usage:
+The password is generated from the first 15 bytes of the hash.
 ```
-$ ./mkthomsonpod 87318
-cadff4300001088
+HMAC_MD5(data="YYYY.mm.dd", key="thomson525")
+```
 
-$ ./mkthomsonpod 87318 thomson
-cadff4300001088
+####### Usage
 
-$ ./mkthomsonpod 87318 foobar
+Get PoD for current date
+```
+$ ./mkthomsonpod.rb 
+8dd1ec1d039a4ab
+```
+
+Get PoD for specific date
+```
+$ ./mkthomsonpod.rb 1970-01-02
+cadff4300001088
+```
+
+Get PoD for specific date, using custom key
+```
+$ ./mkthomsonpod.rb 1970-01-02 foobar
 ec69e90125bb926
-
-$ ./mkthomsonpod `date +%s`
-76206924ebddf1b
 ```
 
 
