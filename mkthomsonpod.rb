@@ -1,5 +1,8 @@
 #!/usr/bin/ruby
 
+# Copyright (C) 2020 Joseph C. Lehner <joseph.c.lehner@gmail.com>
+# Licensed under the GNU GPLv3
+
 require 'openssl'
 require 'date'
 
