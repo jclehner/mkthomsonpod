@@ -10,7 +10,7 @@ The password is generated from the first 15 bytes of the hash.
 HMAC_MD5(data="YYYY.mm.dd", key="thomson525")
 ```
 
-####### Usage
+###### Usage
 
 Get PoD for current date
 ```
