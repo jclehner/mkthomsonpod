@@ -27,7 +27,7 @@ cadff4300001088
 Get PoD for specific date, using custom key
 ```
 $ ./mkthomsonpod.rb 1970-01-02 foobar
-ec69e90125bb926
+c8735183a9028db
 ```
 
 
