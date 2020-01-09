@@ -5,12 +5,12 @@ This is a PoD (password of the day) generator for Thomson and
 Technicolor cable modems. It has been verified to work on a
 Thomson TWG850, TWG870 and Technicolor TC7200.
 
-The password is generated from the first 15 bytes of the hash.
+The password is generated from the first 15 bytes of the hash:
 ```
 HMAC_MD5(data="YYYY.mm.dd", key="thomson525")
 ```
 
-####### Usage
+###### Usage
 
 Get PoD for current date
 ```
